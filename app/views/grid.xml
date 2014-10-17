@@ -1,4 +1,7 @@
 <Alloy>
 	<Window class="container">
+		<Label class="title">Sudoku</Label>
+		<Button id="buttonIndex" onClick="backIndex">Menu</Button>
+		
 	</Window>
 </Alloy>

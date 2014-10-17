@@ -1,10 +1,15 @@
 ".container": {
-	backgroundColor:"white",
+	backgroundColor:"#FFF",
 	layout: "vertical"
 }
 
-"Label": {
+".title": {
 	width: Ti.UI.SIZE,
 	height: Ti.UI.SIZE,
-	color: "#000"
+	color: "#333"
+}
+
+"#bestScore": {
+	width: Ti.UI.SIZE,
+	height: Ti.UI.SIZE
 }

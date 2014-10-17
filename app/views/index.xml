@@ -1,6 +1,9 @@
 <Alloy>
 	<Window class="container">
-		<Label>Sudoku</Label>
+		<Label class="title">Sudoku</Label>
+		
+		<Label id="bestScore">Meilleur score</Label>
+		
 		<Button id="buttonStart" onClick="start">Jouer</Button>
 	</Window>
 </Alloy>

@@ -1,4 +1,22 @@
 ".container": {
-	backgroundColor:"white",
+	backgroundColor:"#EEE",
 	layout: "vertical"
+}
+
+".title": {
+	width: Ti.UI.SIZE,
+	height: Ti.UI.SIZE,
+	color: "#333"
+}
+
+"#buttonIndex": {
+	
+}
+
+"TableView": {
+	
+}
+
+"TableView": {
+	borderColor: "#000"
 }
