@@ -1,4 +1,4 @@
-var sudoku = {
+var sudoku = { 
 	emptySquare: 40,
 	loopLimit: 10000,
 	grid: new Array(),
@@ -7,11 +7,12 @@ var sudoku = {
 	squares: new Array(),
 	i_while: 0,
 	grid_complete: false,
+	numberStep: 0,
 	init: init,
 	shuffle: shuffle
 };
 
-function init() {
+function init(view, tableView) {
 	outerwhile:
 	// Tant que la limite de loop n'a pas été atteinte et que la grille n'est pas complète 
 	while ((this.i_while < this.loopLimit) && !this.grid_complete) {
@@ -74,38 +75,61 @@ function init() {
 		var cases_a_vider = new Array();
 
 		for (var i = 1; i <= 81; i++) {
-			if (i <= emptySquare) cases_a_vider[i] = true;
+			if (i <= this.emptySquare) cases_a_vider[i] = true;
 			else cases_a_vider[i] = false;
 		}
 
 		cases_a_vider = this.shuffle(cases_a_vider);
 
-		var html = "<table cellpadding='0'><tbody>";
-		var html_enonce = "<table cellpadding='0'><tbody>";
+		// var html = "<table cellpadding='0'><tbody>";
+		// var html_enonce = "<table cellpadding='0'><tbody>";
 		var count = 0;
 
 		for (var y = 1; y <= 9; y++) {
-			html += "<tr>";
-			html_enonce += "<tr>";
+			// html += "<tr>";
+			// html_enonce += "<tr>";
+			
+			var row = Ti.UI.createTableViewRow({
+				width: Ti.UI.FILL,
+				height: Ti.UI.SIZE,
+				layout: "horizontal"
+			});
 
 			for (var x = 1; x <= 9; x++) {
 				count++;
 
-				html += "<td>" + ((cases_a_vider[count]) ? '<span class="red">' + grid[y][x] + '</span>' : grid[y][x]) + "</td>";
-				html_enonce += "<td" + ((cases_a_vider[count]) ? ' class="vide">&nbsp;' : '>' + grid[y][x]) + "</td>";
+				// html += "<td>" + ((cases_a_vider[count]) ? '<span class="red">' + grid[y][x] + '</span>' : grid[y][x]) + "</td>";
+				// html_enonce += "<td" + ((cases_a_vider[count]) ? ' class="vide">&nbsp;' : '>' + grid[y][x]) + "</td>";
+				
+				var textfield = Ti.UI.createTextField({
+    				height: Ti.UI.SIZE,
+    				value: String(this.grid[y][x]),
+    				maxLength: 1,
+    				keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD
+				});
+
+				textfield.addEventListener('click', function(e) {					
+					numberStep++;
+				});
+    			
+    			row.add(textfield);
 			}
 
-			html += "</tr>";
-			html_enonce += "</tr>";
+			// html += "</tr>";
+			// html_enonce += "</tr>";
+			
+			tableView.add(row);
 		}
 
-		html += "</tbody></table>";
-		html_enonce += "</tbody></table>";
-
-		document.getElementById("grid_a_faire").innerHTML = html_enonce;
-		document.getElementById("grid_solution").innerHTML = html;
-		document.getElementById("resultat").style.display = 'block';
-		document.getElementById("erreur").style.display = 'none';
+		// html += "</tbody></table>";
+		// html_enonce += "</tbody></table>";
+		
+		view.add(tableView);
+		
+		// document.getElementById("grid_a_faire").innerHTML = html_enonce;
+		// document.getElementById("grid_solution").innerHTML = html;
+		// document.getElementById("resultat").style.display = 'block';
+		// document.getElementById("erreur").style.display = 'none';
 	}
 	else {
 		var today = new Date;
