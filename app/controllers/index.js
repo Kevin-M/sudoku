@@ -1,5 +1,7 @@
-function doClick(e) {
-    alert($.label.text);
+function start(e) {
+    var gridView = Alloy.createController('grid');
+    
+    gridView.getView().open();
 }
 
 $.index.open();
