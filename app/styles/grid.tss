@@ -1,12 +1,20 @@
 ".container": {
-	backgroundColor:"#EEE",
+	backgroundColor:"#FFF",
 	layout: "vertical"
+}
+
+".header": {
+	width: Ti.UI.FILL,
+	height: 80,
+	backgroundColor: "#E85350",
+	layout: "horizontal"
 }
 
 ".title": {
 	width: Ti.UI.SIZE,
 	height: Ti.UI.SIZE,
-	color: "#333"
+	fontSize: 20,
+	color: "#FFF"
 }
 
 "#buttonIndex": {
@@ -17,6 +25,11 @@
 	
 }
 
-"TableView": {
-	borderColor: "#000"
+"TableViewRow": {
+
 }
+
+"TextField": {
+
+}
+

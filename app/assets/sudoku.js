@@ -1,22 +1,34 @@
-var sudoku = { 
-	emptySquare: 40,
+var sudoku = {
+	emptySquare: 10,
 	loopLimit: 10000,
+	currentLoop: 0,
 	grid: new Array(),
 	row: new Array(),
 	columns: new Array(),
 	squares: new Array(),
-	i_while: 0,
-	grid_complete: false,
 	numberStep: 0,
+	grid_complete: false,
 	init: init,
 	shuffle: shuffle
 };
 
-function init(view, tableView) {
+function init(view) {
+	var tableView = Ti.UI.createTableView({
+		width: Ti.UI.SIZe,
+		height: Ti.UI.SIZE,
+		layout: "vertical"
+	});
+	
+	var labelNumberStep = Ti.UI.createLabel({
+		text: "0 coup",
+		color: "#E85350"
+	});
+	
 	outerwhile:
-	// Tant que la limite de loop n'a pas été atteinte et que la grille n'est pas complète 
-	while ((this.i_while < this.loopLimit) && !this.grid_complete) {
-		this.i_while++;
+	// Tant que la limite de loop n'a pas été atteinte et que la grille n'est pas complète
+	// Remplissage de toute la grille (commentaire à virer !)
+	while ((this.currentLoop < this.loopLimit) && !this.grid_complete) {
+		this.currentLoop++;
 		
 		for (var i = 1; i <= 9; i++) {
 			this.grid[i] = new Array(); // Ligne de la grid
@@ -71,15 +83,21 @@ function init(view, tableView) {
 		this.grid_complete = true;
 	}
 
+	// Si le remplissage de la grille est terminé
 	if (this.grid_complete) {
-		var cases_a_vider = new Array();
+		var squaresToEmpty = new Array();
 
+		// Parcours de toutes les cases
 		for (var i = 1; i <= 81; i++) {
-			if (i <= this.emptySquare) cases_a_vider[i] = true;
-			else cases_a_vider[i] = false;
+			// Si la position de la case courante est inférieure au nombre de case à vider
+			// La marque comme étant à vider
+			if (i <= this.emptySquare) squaresToEmpty[i] = true;
+			// Sinon la marque comme étant à garder telle quelle
+			else squaresToEmpty[i] = false;
 		}
 
-		cases_a_vider = this.shuffle(cases_a_vider);
+		
+		squaresToEmpty = this.shuffle(squaresToEmpty);
 
 		// var html = "<table cellpadding='0'><tbody>";
 		// var html_enonce = "<table cellpadding='0'><tbody>";
@@ -98,18 +116,26 @@ function init(view, tableView) {
 			for (var x = 1; x <= 9; x++) {
 				count++;
 
-				// html += "<td>" + ((cases_a_vider[count]) ? '<span class="red">' + grid[y][x] + '</span>' : grid[y][x]) + "</td>";
-				// html_enonce += "<td" + ((cases_a_vider[count]) ? ' class="vide">&nbsp;' : '>' + grid[y][x]) + "</td>";
+				// html += "<td>" + ((squaresToEmpty[count]) ? '<span class="red">' + grid[y][x] + '</span>' : grid[y][x]) + "</td>";
+				// html_enonce += "<td" + ((squaresToEmpty[count]) ? ' class="vide">&nbsp;' : '>' + grid[y][x]) + "</td>";
 				
 				var textfield = Ti.UI.createTextField({
-    				height: Ti.UI.SIZE,
-    				value: String(this.grid[y][x]),
-    				maxLength: 1,
-    				keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD
+    				value: (squaresToEmpty[count]) ? '' : String(this.grid[y][x]),
+    				width: 38,
+					height: 38,
+					textAlign: "center",
+					color: "#FFF",
+					maxLength: 1,
+					backgroundColor: (squaresToEmpty[count]) ? "#FFF" : "#E85350",
+					keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD
 				});
 
-				textfield.addEventListener('click', function(e) {					
-					numberStep++;
+				textfield.addEventListener('change', function(e) {
+					if (e.value != '') {
+						this.numberStep++;
+
+						labelNumberStep.text = this.numberStep + (this.numberStep == 1) ? " coup" : " coups";
+					}
 				});
     			
     			row.add(textfield);
@@ -125,6 +151,7 @@ function init(view, tableView) {
 		// html_enonce += "</tbody></table>";
 		
 		view.add(tableView);
+		view.add(labelNumberStep);
 		
 		// document.getElementById("grid_a_faire").innerHTML = html_enonce;
 		// document.getElementById("grid_solution").innerHTML = html;
@@ -141,6 +168,6 @@ function init(view, tableView) {
 }
 
 function shuffle(array) {
-	for(var j, x, i = array.length; i; j = parseInt(Math.random() * i), x = array[--i], array[i] = array[j], array[j] = x);
+	for (var j, x, len = array.length; len; j = parseInt(Math.random() * len), x = array[--len], array[len] = array[j], array[j] = x);
 	return array;
 }

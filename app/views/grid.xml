@@ -1,7 +1,8 @@
 <Alloy>
 	<Window class="container">
-		<Label class="title">Sudoku</Label>
-		<Button id="buttonIndex" onClick="backIndex">Menu</Button>
-		
+		<View class="header">
+			<Button id="buttonIndex" onClick="backIndex">Menu</Button>
+			<Label class="title">Sudoku</Label>
+		</View>
 	</Window>
 </Alloy>
