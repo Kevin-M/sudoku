@@ -1,0 +1,28 @@
+"Window": {
+	font: {
+		fontFamily: "Arial",
+        fontSize: "12dp"
+   },
+   backgroundColor: "#FFF"
+}
+
+".container": {
+	layout: "vertical"
+}
+
+".header": {
+	width: Ti.UI.FILL,
+	height: "80dp",
+	backgroundColor: "#E85350",
+	layout: "horizontal"
+}
+
+".title": {
+	width: Ti.UI.SIZE,
+	height: Ti.UI.SIZE,
+	font: {
+		fontSize: "16dp",
+		fontWeight: "bold"
+	},
+	color: "#FFF"
+}

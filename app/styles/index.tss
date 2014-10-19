@@ -1,20 +1,4 @@
-".container": {
-	backgroundColor:"#FFF",
-	layout: "vertical"
-}
-
-".header": {
-	width: Ti.UI.FILL,
-	height: 80,
-	backgroundColor: "#E85350",
-	layout: "horizontal"
-}
-
-".title": {
-	width: Ti.UI.SIZE,
-	height: Ti.UI.SIZE,
-	fontSize: 20,
-	color: "#FFF"
+"#buttonStart": {
 }
 
 "#bestScore": {

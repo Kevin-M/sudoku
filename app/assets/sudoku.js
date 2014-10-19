@@ -1,5 +1,5 @@
 var sudoku = {
-	emptySquare: 10,
+	emptySquare: 20,
 	loopLimit: 10000,
 	currentLoop: 0,
 	grid: new Array(),
@@ -7,7 +7,7 @@ var sudoku = {
 	columns: new Array(),
 	squares: new Array(),
 	numberStep: 0,
-	grid_complete: false,
+	complete: false,
 	init: init,
 	shuffle: shuffle
 };
@@ -27,7 +27,7 @@ function init(view) {
 	outerwhile:
 	// Tant que la limite de loop n'a pas été atteinte et que la grille n'est pas complète
 	// Remplissage de toute la grille (commentaire à virer !)
-	while ((this.currentLoop < this.loopLimit) && !this.grid_complete) {
+	while ((this.currentLoop < this.loopLimit) && !this.complete) {
 		this.currentLoop++;
 		
 		for (var i = 1; i <= 9; i++) {
@@ -80,11 +80,11 @@ function init(view) {
 			}
 		}
 
-		this.grid_complete = true;
+		this.complete = true;
 	}
 
 	// Si le remplissage de la grille est terminé
-	if (this.grid_complete) {
+	if (this.complete) {
 		var squaresToEmpty = new Array();
 
 		// Parcours de toutes les cases
@@ -124,17 +124,20 @@ function init(view) {
     				width: 38,
 					height: 38,
 					textAlign: "center",
-					color: "#FFF",
+					color: (squaresToEmpty[count]) ? "#555" : "#FFF",
 					maxLength: 1,
 					backgroundColor: (squaresToEmpty[count]) ? "#FFF" : "#E85350",
+					enabled: (squaresToEmpty[count]) ? true : false,
+					editable: (squaresToEmpty[count]) ? true : false,
+					focusable: (squaresToEmpty[count]) ? true : false,
 					keyboardType: Ti.UI.KEYBOARD_DECIMAL_PAD
 				});
 
 				textfield.addEventListener('change', function(e) {
-					if (e.value != '') {
+					if (isValidValue(e.value)) {
 						this.numberStep++;
 
-						labelNumberStep.text = this.numberStep + (this.numberStep == 1) ? " coup" : " coups";
+						labelNumberStep.text = String(this.numberStep) + (this.numberStep == 1) ? " coup" : " coups";
 					}
 				});
     			
@@ -152,7 +155,7 @@ function init(view) {
 		
 		view.add(tableView);
 		view.add(labelNumberStep);
-		
+
 		// document.getElementById("grid_a_faire").innerHTML = html_enonce;
 		// document.getElementById("grid_solution").innerHTML = html;
 		// document.getElementById("resultat").style.display = 'block';
@@ -161,13 +164,21 @@ function init(view) {
 	else {
 		var today = new Date;
 
-		document.getElementById("resultat").style.display = 'none';
-		document.getElementById("erreur").style.display = 'block';
-		document.getElementById("erreur").innerHTML = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds() + " : Echec apr&egrave;s " + loopLimit + " tentatives.";
+		console.log(today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds() + ' : ' + loopLimit + ' coups');
+
+		// document.getElementById("resultat").style.display = 'none';
+		// document.getElementById("erreur").style.display = 'block';
+		// document.getElementById("erreur").innerHTML = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds() + " : Echec apr&egrave;s " + loopLimit + " tentatives.";
 	}
 }
 
 function shuffle(array) {
 	for (var j, x, len = array.length; len; j = parseInt(Math.random() * len), x = array[--len], array[len] = array[j], array[j] = x);
 	return array;
+}
+
+function isValidValue(value) {
+	if (value != '' && value != 0) return true;
+	
+	return false;
 }
