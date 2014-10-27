@@ -1,25 +1,26 @@
 var sudoku = {
-	emptySquare: 20,
+	emptySquare: 2,
 	loopLimit: 10000,
-	currentLoop: 0,
 	grid: new Array(),
 	row: new Array(),
 	columns: new Array(),
 	squares: new Array(),
-	numberStep: 0,
+	inputs: new Array(),
+	solution: new Array(),
+	step: 0,
 	complete: false,
-	init: init,
-	shuffle: shuffle
+	init: init
 };
 
 function init(view) {
+	var currentLoop = 0;
 	var tableView = Ti.UI.createTableView({
 		width: Ti.UI.SIZe,
 		height: Ti.UI.SIZE,
 		layout: "vertical"
 	});
 	
-	var labelNumberStep = Ti.UI.createLabel({
+	var labelStep = Ti.UI.createLabel({
 		text: "0 coup",
 		color: "#E85350"
 	});
@@ -27,8 +28,8 @@ function init(view) {
 	outerwhile:
 	// Tant que la limite de loop n'a pas été atteinte et que la grille n'est pas complète
 	// Remplissage de toute la grille (commentaire à virer !)
-	while ((this.currentLoop < this.loopLimit) && !this.complete) {
-		this.currentLoop++;
+	while ((currentLoop < this.loopLimit) && !this.complete) {
+		currentLoop++;
 		
 		for (var i = 1; i <= 9; i++) {
 			this.grid[i] = new Array(); // Ligne de la grid
@@ -95,9 +96,8 @@ function init(view) {
 			// Sinon la marque comme étant à garder telle quelle
 			else squaresToEmpty[i] = false;
 		}
-
 		
-		squaresToEmpty = this.shuffle(squaresToEmpty);
+		squaresToEmpty = shuffle(squaresToEmpty);
 
 		// var html = "<table cellpadding='0'><tbody>";
 		// var html_enonce = "<table cellpadding='0'><tbody>";
@@ -116,10 +116,17 @@ function init(view) {
 			for (var x = 1; x <= 9; x++) {
 				count++;
 
+				if (squaresToEmpty[count]) {
+					this.solution[count] = this.grid[y][x];
+				}
+				
+				// console.log(this.solution);
+
 				// html += "<td>" + ((squaresToEmpty[count]) ? '<span class="red">' + grid[y][x] + '</span>' : grid[y][x]) + "</td>";
 				// html_enonce += "<td" + ((squaresToEmpty[count]) ? ' class="vide">&nbsp;' : '>' + grid[y][x]) + "</td>";
 				
 				var textfield = Ti.UI.createTextField({
+					id: "square-" + count,
     				value: (squaresToEmpty[count]) ? '' : String(this.grid[y][x]),
     				width: 38,
 					height: 38,
@@ -135,9 +142,24 @@ function init(view) {
 
 				textfield.addEventListener('change', function(e) {
 					if (isValidValue(e.value)) {
-						this.numberStep++;
+						sudoku.inputs[getSquarePosition(e)] = e.value;
+						
+						sudoku.step++;
 
-						labelNumberStep.text = String(this.numberStep) + (this.numberStep == 1) ? " coup" : " coups";
+						labelStep.text = sudoku.step + (sudoku.step == 1 ? ' coup' : ' coups');
+						
+						if (sudoku.step == sudoku.emptySquare) {
+							if (sudoku.inputs.join() === sudoku.solution.join()) {
+								alert('Gagné en ' + sudoku.step + ' coups');
+								
+								// @TODO: si enregistrement de DB réussi, goto home
+								
+								save(sudoku.step, sudoku.grid, sudoku.inputs);		
+							}
+						}
+					}
+					else {
+						this.value = '';						
 					}
 				});
     			
@@ -154,7 +176,7 @@ function init(view) {
 		// html_enonce += "</tbody></table>";
 		
 		view.add(tableView);
-		view.add(labelNumberStep);
+		view.add(labelStep);
 
 		// document.getElementById("grid_a_faire").innerHTML = html_enonce;
 		// document.getElementById("grid_solution").innerHTML = html;
@@ -174,11 +196,34 @@ function init(view) {
 
 function shuffle(array) {
 	for (var j, x, len = array.length; len; j = parseInt(Math.random() * len), x = array[--len], array[len] = array[j], array[j] = x);
+	
 	return array;
 }
 
 function isValidValue(value) {
-	if (value != '' && value != 0) return true;
+	if (value != '' && value >=1 && value <= 9) return true;
 	
 	return false;
+}
+
+function getSquarePosition(e) {
+	if (e.source.id != undefined) {
+		return parseInt(e.source.id.substring(7));
+	}
+	
+	return null;
+}
+
+function save(step, grid, inputs) {
+	var db = Ti.Database.open('sudoku');
+	var bestScore = db.execute('SELECT * FROM best_score');
+	
+	console.log(bestScore);
+	
+	if (bestScore == '') {
+		db.execute('INSERT INTO best_score (id, score, grid, inputs) VALUES (?, ?, ?, ?)', 1, step, grid, inputs);
+	}
+	else {
+		
+	}
 }
