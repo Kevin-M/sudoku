@@ -26,8 +26,6 @@ if (Titanium.App.Properties.getInt('dbcreated') == 0) {
 	db.close();
 }*/
 
-console.log(Ti);
-
 //var db = Ti.Database.install('../sudoku.sqlite', 'sudoku');
 //var db = Ti.Database.open('sudoku');
 

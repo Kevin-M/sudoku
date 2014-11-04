@@ -15,14 +15,14 @@ var sudoku = {
 function init(view) {
 	var currentLoop = 0;
 	var tableView = Ti.UI.createTableView({
-		width: Ti.UI.SIZe,
+		width: Ti.UI.FILL,
 		height: Ti.UI.SIZE,
-		layout: "vertical"
+		layout: 'vertical'
 	});
 	
 	var labelStep = Ti.UI.createLabel({
-		text: "0 coup",
-		color: "#E85350"
+		text: '0 coup',
+		color: '#E85350'
 	});
 	
 	outerwhile:
@@ -227,3 +227,5 @@ function save(step, grid, inputs) {
 		
 	}
 }
+
+exports.sudoku = sudoku;
