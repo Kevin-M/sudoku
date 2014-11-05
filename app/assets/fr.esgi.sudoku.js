@@ -1,3 +1,4 @@
+// @TODO: ne pas laisser en variables globales
 var tableView = Ti.UI.createTableView({
 	width: Ti.UI.FILL,
 	height: Ti.UI.SIZE,
@@ -7,7 +8,6 @@ var labelStep = Ti.UI.createLabel({
 	text: '0 coup',
 	color: '#E85350'
 });
-
 
 function Sudoku() {
 	this.emptySquare = 2;
@@ -118,8 +118,6 @@ function Sudoku() {
 					if (squaresToEmpty[count]) {
 						this.solution[count] = this.grid[y][x];
 					}
-					
-					// console.log(this.solution);
 	
 					// html += "<td>" + ((squaresToEmpty[count]) ? '<span class="red">' + grid[y][x] + '</span>' : grid[y][x]) + "</td>";
 					// html_enonce += "<td" + ((squaresToEmpty[count]) ? ' class="vide">&nbsp;' : '>' + grid[y][x]) + "</td>";
@@ -175,6 +173,16 @@ function Sudoku() {
 			// document.getElementById("erreur").innerHTML = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds() + " : Echec apr&egrave;s " + loopLimit + " tentatives.";
 		}
 	};
+	
+	this.save = function() {		
+		Ti.App.Properties.setObject('sudoku1', {
+			'step': this.step,
+			'grid': this.grid,
+			'inputs': this.inputs
+		});
+		
+		// console.log(Ti.App.Properties.getObject('sudoku1'));
+	};
 }
 
 function inputProcess() {
@@ -184,7 +192,7 @@ function inputProcess() {
 	var source = arguments[0].source;
 	var value = arguments[0].value;
 	
-	if (value != undefined && isValidValue(value)) {	
+	if (value != undefined && isValidValue(value)) {		
 		this.inputs[getSquarePosition(source)] = value;
 		
 		this.step++;
@@ -197,7 +205,7 @@ function inputProcess() {
 				
 				// @TODO: si enregistrement de DB réussi, goto home
 				
-				// save(Sudoku.step, sudoku.grid, sudoku.inputs);		
+				this.save();		
 			}
 		}
 	}
