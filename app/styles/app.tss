@@ -18,10 +18,12 @@
 }
 
 ".title": {
-	width: Ti.UI.SIZE,
+	width: Ti.UI.FILL,
 	height: Ti.UI.SIZE,
+  	top: 30,
+  	textAlign: Titanium.UI.TEXT_ALIGNMENT_CENTER,
 	font: {
-		fontSize: "16dp",
+		fontSize: "18dp",
 		fontWeight: "bold"
 	},
 	color: "#FFF"

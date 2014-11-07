@@ -4,7 +4,7 @@
 			<Label class="title">Sudoku</Label>
 		</View>
 		
-		<Label id="bestScore">Meilleur score</Label>
+		<Label id="bestScore">Meilleur score :</Label>
 		
 		<Button id="buttonStart" onClick="start">Jouer</Button>
 	</Window>

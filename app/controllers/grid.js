@@ -6,3 +6,7 @@ sudoku.init($.grid);
 function backIndex(e) {
 	$.grid.close();
 }
+
+function help() {
+	sudoku.help();
+}

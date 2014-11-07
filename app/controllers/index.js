@@ -36,9 +36,9 @@ if (Titanium.App.Properties.getInt('dbcreated') == 0) {
 
 
 
-var test = Ti.App.Properties.getObject('sudoku1');
+var bestScore = Ti.App.Properties.getObject('bestScore');
 
-$.bestScore.text = test.step;
+$.bestScore.text = $.bestScore.text + ((bestScore != null) ? ' ' + bestScore : ' 0'); 
 
 function start(e) {
     var gridView = Alloy.createController('grid');

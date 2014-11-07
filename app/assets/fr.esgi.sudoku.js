@@ -175,13 +175,18 @@ function Sudoku() {
 	};
 	
 	this.save = function() {		
-		Ti.App.Properties.setObject('sudoku1', {
+		Ti.App.Properties.setObject('bestScore', {
 			'step': this.step,
 			'grid': this.grid,
 			'inputs': this.inputs
 		});
 		
-		// console.log(Ti.App.Properties.getObject('sudoku1'));
+		// console.log(Ti.App.Properties.getObject('bestScore'));
+	};
+	
+	// Enlever des points quand l'utilisateur est aidé ?
+	this.help = function() {
+		
 	};
 }
 
@@ -192,7 +197,7 @@ function inputProcess() {
 	var source = arguments[0].source;
 	var value = arguments[0].value;
 	
-	if (value != undefined && isValidValue(value)) {		
+	if (value != undefined && isValidValue(value)) {
 		this.inputs[getSquarePosition(source)] = value;
 		
 		this.step++;

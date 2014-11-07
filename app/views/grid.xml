@@ -3,6 +3,7 @@
 		<View class="header">
 			<Button id="buttonIndex" onClick="backIndex">Menu</Button>
 			<Label class="title">Sudoku</Label>
+			<Button id="buttonHelp" onClick="help">Aide</Button>
 		</View>
 	</Window>
 </Alloy>
