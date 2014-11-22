@@ -6,6 +6,8 @@
 		
 		<Label id="bestScore">Meilleur score :</Label>
 		
+		<Button id="buttonReplay" onClick="replay">Replay</Button>
+		
 		<Button id="buttonStart" onClick="start">Jouer</Button>
 	</Window>
 </Alloy>

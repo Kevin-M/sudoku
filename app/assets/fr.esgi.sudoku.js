@@ -22,7 +22,7 @@ function Sudoku() {
 
 	this.init = function(view) {
 		var currentLoop = 0;
-		var rows = new Array();
+		var rows        = new Array();
 		
 		outerwhile:
 		// Tant que la limite de loop n'a pas été atteinte et que la grille n'est pas complète
@@ -31,13 +31,13 @@ function Sudoku() {
 			currentLoop++;
 			
 			for (var i = 1; i <= 9; i++) {
-				this.grid[i] = new Array(); // Ligne de la grid
-				this.row[i] = new Array(); // Array pour les row
+				this.grid[i]    = new Array(); // Ligne de la grid
+				this.row[i]     = new Array(); // Array pour les row
 				this.columns[i] = new Array(); // Array pour les columns
 				
 				for (var j = 1; j <= 9; j++) {
-					this.grid[i][j] = 0; // Toutes les cases à 0
-					this.row[i][j] = j; // Complète toutes les possibilités de la ligne
+					this.grid[i][j]    = 0; // Toutes les cases à 0
+					this.row[i][j]     = j; // Complète toutes les possibilités de la ligne
 					this.columns[i][j] = j; // Complète toutes les possibilités de la colonne
 				}
 			}
@@ -73,8 +73,8 @@ function Sudoku() {
 					
 					var nb = possibilites[Math.floor((Math.random() * possibilites.length))];
 					
-					this.grid[y][x] = nb;
-					this.row[y][nb] = undefined;
+					this.grid[y][x]     = nb;
+					this.row[y][nb]     = undefined;
 					this.columns[x][nb] = undefined;
 					this.squares[Math.ceil(y / 3)][Math.ceil(x / 3)][nb] = undefined;
 				}
@@ -184,6 +184,58 @@ function Sudoku() {
 		// console.log(Ti.App.Properties.getObject('bestScore'));
 	};
 	
+	// Rejoue la meilleure partie
+	this.replay = function(view, bestScore) {
+		// console.log(bestScore);
+		
+		var grid   = bestScore.grid;
+		var inputs = bestScore.inputs;
+		// var step = bestScore.step
+		
+		var rows           = new Array();
+		var squaresToEmpty = new Array();
+
+		// Parcours de toutes les cases
+		for (var i = 1; i <= 81; i++) {
+		    if (inputs[i] != null) {
+		    	squaresToEmpty[i] = inputs[i];
+		    }
+		}
+		
+		var count = 0;
+		
+		for (var y = 1; y <= 9; y++) {
+		    var row = Ti.UI.createTableViewRow({
+		        witdh: Ti.UI.FILL,
+		        height: Ti.UI.SIZE,
+		        layout: 'horizontal'
+		    });
+		
+		    for (var x = 1; x <= 9; x++) {
+		        count++;
+	
+	            var label = Ti.UI.createLabel({
+	            	id: 'square-' + count,
+                    text: (squaresToEmpty[count] != null) ? squaresToEmpty[count] : String(grid[y][x]),
+                    width: 38,
+                    height: 38,
+                    textAlign: "center",
+                    color: (squaresToEmpty[count] != null) ? '#555' : '#FFF',
+                    backgroundColor: (squaresToEmpty[count] != null) ? '#FFF' : '#E85350',
+				});
+				
+				row.add(label);      
+		    }
+		    
+		    rows.push(row);
+		}
+		
+		tableView.data = rows;
+		
+		view.add(tableView);
+		view.add(labelStep);
+	};
+	
 	// Enlever des points quand l'utilisateur est aidé ?
 	this.help = function() {
 		
@@ -225,6 +277,7 @@ function shuffle(array) {
 	return array;
 }
 
+// Vérifie qu'une valeur entrée dans une case est valide
 function isValidValue(value) {
 	if (value != '' && value >=1 && value <= 9) return true;
 	

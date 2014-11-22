@@ -35,11 +35,20 @@ if (Titanium.App.Properties.getInt('dbcreated') == 0) {
 
 
 
-
+// Récupération des données de la meilleure partie
 var bestScore = Ti.App.Properties.getObject('bestScore');
 
 $.bestScore.text = $.bestScore.text + ((bestScore != null) ? ' ' + bestScore : ' 0'); 
 
+function replay(e) {
+	// Récupération des données de la meilleure partie
+	var bestScore = Ti.App.Properties.getObject('bestScore');
+	var gridView  = Alloy.createController('grid', {bestScore: bestScore});
+    
+    gridView.getView().open({animation: true});
+}
+
+// Lancement d'une partie
 function start(e) {
     var gridView = Alloy.createController('grid');
     
